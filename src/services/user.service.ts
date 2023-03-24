@@ -67,3 +67,16 @@ export const findUsers = async ({
 		team: user.team.team,
 	})) as UserApiResponse[];
 };
+
+export const getUser = async (userId: string) => {
+	return await userRepository.findOneBy({ id: userId });
+};
+
+export const getUserToUpdate = async (userId: string) =>
+	userRepository
+		.createQueryBuilder('user')
+		.leftJoinAndSelect('user.role', 'role')
+		.leftJoinAndSelect('user.status', 'status')
+		.leftJoinAndSelect('user.team', 'team')
+		.where('user.id = :id', { id: userId })
+		.getOne();

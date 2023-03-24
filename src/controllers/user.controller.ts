@@ -1,9 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
-import { CreateUserInput } from '../schemas/user.schema';
-import { createUser, findUsers } from '../services/user.service';
+import { CreateUserInput, UpdateUserInput } from '../schemas/user.schema';
+import {
+	createUser,
+	findUsers,
+	getUser,
+	getUserToUpdate,
+} from '../services/user.service';
 import { findRoleById } from '../services/role.service';
 import { findStatusById } from '../services/status.service';
 import { findTeamById } from '../services/team.service';
+import AppError from '../utils/appError';
 
 // ? POST method:- Create a new User
 export const createUserHandler = async (
@@ -53,6 +59,38 @@ export const getUsersHandler = async (
 			status: 'success',
 			data: {
 				users,
+			},
+		});
+	} catch (err: any) {
+		next(err);
+	}
+};
+
+// ? PATCH method:- Update User
+export const updateUserHandler = async (
+	req: Request<UpdateUserInput['params'], {}, UpdateUserInput['body']>,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const user = await getUserToUpdate(req.params.userId);
+
+		if (!user) {
+			return next(new AppError(404, 'User with that ID not found'));
+		}
+
+		user.name = req.body.name;
+		user.email = req.body.email;
+		user.role.id = req.body.roleId;
+		user.status.id = req.body.statusId;
+		user.team.id = req.body.teamId;
+
+		const updatedUser = await user.save();
+
+		res.status(200).json({
+			status: 'success',
+			data: {
+				user: updatedUser,
 			},
 		});
 	} catch (err: any) {
