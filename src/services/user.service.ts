@@ -17,6 +17,15 @@ export const createUser = async (
 	);
 };
 
+interface UserApiResponse {
+	id: string;
+	name: string;
+	email: string;
+	role: string;
+	status: string;
+	team: string;
+}
+
 export const findUsers = async ({
 	name,
 	sortBy,
@@ -25,7 +34,7 @@ export const findUsers = async ({
 	name?: string;
 	sortBy?: 'name';
 	sort?: 'ASC' | 'DESC';
-}): Promise<User[]> => {
+}): Promise<UserApiResponse[]> => {
 	let query = userRepository.createQueryBuilder('user');
 	if (name) {
 		query = query.where('user.name = :name', { name });
@@ -37,6 +46,24 @@ export const findUsers = async ({
 		query = query.orderBy('RANDOM()');
 	}
 
-	const users = await query.getMany();
-	return users;
+	const users = await query
+		.leftJoinAndSelect('user.role', 'role')
+		.leftJoinAndSelect('user.status', 'status')
+		.leftJoinAndSelect('user.team', 'team')
+		.select([
+			'user.id',
+			'user.name',
+			'user.email',
+			'role',
+			'status',
+			'team',
+		])
+		.getMany();
+
+	return users.map((user) => ({
+		...user,
+		role: user.role.role,
+		status: user.status.status,
+		team: user.team.team,
+	})) as UserApiResponse[];
 };
