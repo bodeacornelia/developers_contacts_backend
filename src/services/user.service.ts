@@ -28,22 +28,22 @@ interface UserApiResponse {
 
 export const findUsers = async ({
 	name,
-	sortBy,
-	sort,
+	sortBy = 'name',
+	sort = 'ASC',
 }: {
 	name?: string;
 	sortBy?: 'name';
-	sort?: 'ASC' | 'DESC';
+	sort?: 'ASC' | 'DESC' | 'RANDOM';
 }): Promise<UserApiResponse[]> => {
 	let query = userRepository.createQueryBuilder('user');
 	if (name) {
 		query = query.where('user.name = :name', { name });
 	}
 
-	if (sortBy && sort) {
-		query = query.orderBy(`user.${sortBy}`, sort);
-	} else {
+	if (sort === 'RANDOM') {
 		query = query.orderBy('RANDOM()');
+	} else {
+		query = query.orderBy(`user.${sortBy}`, sort);
 	}
 
 	const users = await query
