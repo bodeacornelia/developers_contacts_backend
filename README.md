@@ -6,24 +6,26 @@ This application is built with *Nodejs, Express, TypeScript and TypeORM*, powerf
 - Node.js 
 - npm
 - docker https://docs.docker.com/get-docker/
-- docker-compose https://docs.docker.com/compose/install/
 
 ### Set up
-1. clone repo: clone [repository URL]
-2. create a *.env* file in the root of the project. Copy variables form example.env file into *.env* file
-3. run command *docker-compose up -d*
-4. run command *npm i* to install all the dependencies
-5. run command *npm run db:push*
-5. run command *npm run start* to run the aplication
+1. clone repo using https: clone [repository URL]
+2. Open project in VSCode
+3. create a *.env* file in the root of the project. Copy variables form example.env file into *.env* file
+4. run command *docker-compose up -d*
+5. run command *npm i* to install all the dependencies
+6. run command *npm run db:push*
+7. run command *npm run start* to run the aplication
+8. check server: open browser and type 'http://localhost:8000/api/healthchecker'
 
 ### The application is organized into different directories and files to make it easy to navigate and maintain. Here's a brief overview of the file structure:
-config/: 
-src/: contains the source code for the application. It is structured as follows: 
-- controllers/: contains api, components and hooks that are generic and can be used easly all over the app
-- entities/: contains the React components used to build the application.
-- middleware/: 
-- migrations/
-    - index.ts: contains the TypeScript type definitions used throughout the application
--  App.tsx: is the main entry point for the application
-- index.css
-- main.tsx: This file renders the React application and injects it into the index.html file.
+- config/: 
+- src/: 
+    - app.ts: the entry point of the api service. It initializes the Express application, sets up middleware, and defines the routes for the API.
+    - controllers/: contains the controller functions that handle HTTP requests and responses. These functions typically call services or repositories to retrieve or manipulate data.
+    - entities/: contains the TypeORM entity classes that define the structure and relationships of the data models used by the application.
+    - middleware/: This directory contains the middleware functions that handle incoming requests before they reach the controllers. This include a validate middleware of the user inputs when a user is created.
+    - migrations/: contains the database migration files that are used to make changes to the database schema. Used to populate 'roles', 'statuses' and 'teams' tables before creating a user.
+    - routes/: contains the route definitions that map HTTP requests to controller functions.
+    - schemas/: contains the schemas definitions that are used to validate incoming request data.
+    - services/: contains the business logic of the application, such as functions for retrieving, manipulating, and validating data. Services typically interact with repositories to perform CRUD operations.
+    - utils/

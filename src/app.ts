@@ -33,14 +33,13 @@ AppDataSource.initialize()
 		app.use('/api/statuses', statusRouter);
 		app.use('/api/teams', teamRouter);
 
-		// // HEALTH CHECKER
-		// app.get('/api/healthchecker', async (_, res: Response) => {
-		// 	const message = await redisClient.get('try');
-		// 	res.status(200).json({
-		// 		status: 'success',
-		// 		message,
-		// 	});
-		// });
+		// HEALTH CHECKER
+		app.get('/api/healthchecker', async (_, res: Response) => {
+			res.status(200).json({
+				status: 'success',
+				message: 'Server is up and running',
+			});
+		});
 
 		app.all('*', (req: Request, res: Response, next: NextFunction) => {
 			next(new AppError(404, `Route ${req.originalUrl} not found`));
