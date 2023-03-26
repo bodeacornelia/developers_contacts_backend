@@ -5,24 +5,21 @@ import express, { NextFunction, Request, Response } from 'express';
 import { AppDataSource } from './utils/data-source';
 import AppError from './utils/appError';
 import morgan from 'morgan';
-import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import 'reflect-metadata';
 import userRouter from './routes/user.routes';
 import roleRouter from './routes/role.routes';
 import statusRouter from './routes/status.routes';
 import teamRouter from './routes/team.routes';
-import 'reflect-metadata';
+
+validateEnv();
 
 AppDataSource.initialize()
 	.then(async () => {
-		validateEnv();
-
 		// create express app
 		const app = express();
 
 		app.use(express.json({ limit: '10kb' }));
-
-		app.use(cookieParser());
 
 		if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 
@@ -35,7 +32,7 @@ AppDataSource.initialize()
 
 		// HEALTH CHECKER
 		app.get('/api/healthchecker', async (_, res: Response) => {
-			res.status(200).json({
+			res.json({
 				status: 'success',
 				message: 'Server is up and running',
 			});

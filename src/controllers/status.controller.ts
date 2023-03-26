@@ -6,16 +6,12 @@ export const getStatusesHandler = async (
 	res: Response,
 	next: NextFunction
 ) => {
-	try {
-		const statuses = await findStatuses();
+	const statuses = await findStatuses();
 
-		res.status(200).json({
-			status: 'success',
-			data: {
-				statuses,
-			},
-		});
-	} catch (err: any) {
-		next(err);
-	}
+	res.json({
+		status: 'success',
+		data: {
+			statuses,
+		},
+	});
 };

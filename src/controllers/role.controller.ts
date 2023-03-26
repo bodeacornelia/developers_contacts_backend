@@ -6,16 +6,12 @@ export const getRolesHandler = async (
 	res: Response,
 	next: NextFunction
 ) => {
-	try {
-		const roles = await findRoles();
+	const roles = await findRoles();
 
-		res.status(200).json({
-			status: 'success',
-			data: {
-				roles,
-			},
-		});
-	} catch (err: any) {
-		next(err);
-	}
+	res.json({
+		status: 'success',
+		data: {
+			roles,
+		},
+	});
 };

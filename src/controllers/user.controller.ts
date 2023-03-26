@@ -3,7 +3,6 @@ import { CreateUserInput, UpdateUserInput } from '../schemas/user.schema';
 import {
 	createUser,
 	findUsers,
-	getUser,
 	getUserToUpdate,
 } from '../services/user.service';
 import { findRoleById } from '../services/role.service';
@@ -25,10 +24,14 @@ export const createUserHandler = async (
 		const status = await findStatusById(statusId as string);
 		const team = await findTeamById(teamId as string);
 
+		if (!role && !status && !team) {
+			return next(new AppError(404, 'Role, Status or Team not found'));
+		}
+
 		if (role && status && team) {
 			const user = await createUser(req.body, role, status, team);
 
-			res.status(201).json({
+			res.json({
 				status: 'success',
 				data: {
 					user,
@@ -37,10 +40,7 @@ export const createUserHandler = async (
 		}
 	} catch (err: any) {
 		if (err.code === '23505') {
-			return res.status(409).json({
-				status: 'fail',
-				message: 'User with that name already exist',
-			});
+			next(new AppError(409, 'User with that name already exist'));
 		}
 		next(err);
 	}
@@ -51,19 +51,15 @@ export const getUsersHandler = async (
 	res: Response,
 	next: NextFunction
 ) => {
-	try {
-		const query = req.query;
-		const users = await findUsers(query);
+	const query = req.query;
+	const users = await findUsers(query);
 
-		res.status(200).json({
-			status: 'success',
-			data: {
-				users,
-			},
-		});
-	} catch (err: any) {
-		next(err);
-	}
+	res.json({
+		status: 'success',
+		data: {
+			users,
+		},
+	});
 };
 
 // ? PATCH method:- Update User
@@ -72,28 +68,24 @@ export const updateUserHandler = async (
 	res: Response,
 	next: NextFunction
 ) => {
-	try {
-		const user = await getUserToUpdate(req.params.userId);
+	const user = await getUserToUpdate(req.params.userId);
 
-		if (!user) {
-			return next(new AppError(404, 'User with that ID not found'));
-		}
-
-		user.name = req.body.name;
-		user.email = req.body.email;
-		user.role.id = req.body.roleId;
-		user.status.id = req.body.statusId;
-		user.team.id = req.body.teamId;
-
-		const updatedUser = await user.save();
-
-		res.status(200).json({
-			status: 'success',
-			data: {
-				user: updatedUser,
-			},
-		});
-	} catch (err: any) {
-		next(err);
+	if (!user) {
+		return next(new AppError(404, 'User with that ID not found'));
 	}
+
+	user.name = req.body.name;
+	user.email = req.body.email;
+	user.role.id = req.body.roleId;
+	user.status.id = req.body.statusId;
+	user.team.id = req.body.teamId;
+
+	const updatedUser = await user.save();
+
+	res.json({
+		status: 'success',
+		data: {
+			user: updatedUser,
+		},
+	});
 };

@@ -14,6 +14,6 @@ router
 	.post(validate(createUserSchema), createUserHandler)
 	.get(getUsersHandler);
 
-router.route('/:userId').patch(validate(updateUserSchema), updateUserHandler);
+router.patch('/:userId', validate(updateUserSchema), updateUserHandler);
 
 export default router;

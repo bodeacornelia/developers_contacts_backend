@@ -9,15 +9,15 @@ export const createUserSchema = object({
 			required_error: 'Email address is required',
 		}).email('Invalid email address'),
 
-		roleId: string(),
-		statusId: string(),
-		teamId: string(),
+		roleId: string().uuid(),
+		statusId: string().uuid(),
+		teamId: string().uuid(),
 	}),
 });
 
 const params = {
 	params: object({
-		userId: string(),
+		userId: string().uuid(),
 	}),
 };
 
@@ -31,9 +31,9 @@ export const updateUserSchema = object({
 			required_error: 'Email address is required',
 		}).email('Invalid email address'),
 
-		roleId: string(),
-		statusId: string(),
-		teamId: string(),
+		roleId: string().uuid(),
+		statusId: string().uuid(),
+		teamId: string().uuid(),
 	}),
 });
 

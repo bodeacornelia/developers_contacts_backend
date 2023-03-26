@@ -1,4 +1,4 @@
-This application is built with *Nodejs, Express, TypeScript and TypeORM*, powerful tools for building robust, scalable and performant web applications. The application is designed to provide a seamless user experience, while also allowing for easy maintenance and updates.
+This application is built with *Nodejs, Express, TypeScript and TypeORM*, powerful tools for building robust, scalable and performant web applications. The application is designed to provide a seamless developer experience, while also allowing for easy maintenance and updates.
 
 ## *Getting Started*
 
@@ -8,8 +8,7 @@ This application is built with *Nodejs, Express, TypeScript and TypeORM*, powerf
 - docker https://docs.docker.com/get-docker/
 
 ### Set up
-1. clone repo using https: clone [repository URL]
-2. Open project in VSCode
+1. clone repo using https: clone https://github.com/bodeacornelia/developers_contacts_backend.git
 3. create a *.env* file in the root of the project. Copy variables form example.env file into *.env* file
 4. run command *docker-compose up -d*
 5. run command *npm i* to install all the dependencies

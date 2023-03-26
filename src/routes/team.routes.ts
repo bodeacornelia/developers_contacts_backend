@@ -3,6 +3,6 @@ import { getTeamsHandler } from '../controllers/team.controller';
 
 const router = express.Router();
 
-router.route('/').get(getTeamsHandler);
+router.get('/', getTeamsHandler);
 
 export default router;

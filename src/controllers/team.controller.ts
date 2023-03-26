@@ -6,16 +6,12 @@ export const getTeamsHandler = async (
 	res: Response,
 	next: NextFunction
 ) => {
-	try {
-		const teams = await findTeams();
+	const teams = await findTeams();
 
-		res.status(200).json({
-			status: 'success',
-			data: {
-				teams,
-			},
-		});
-	} catch (err: any) {
-		next(err);
-	}
+	res.json({
+		status: 'success',
+		data: {
+			teams,
+		},
+	});
 };

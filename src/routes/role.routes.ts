@@ -3,6 +3,6 @@ import { getRolesHandler } from '../controllers/role.controller';
 
 const router = express.Router();
 
-router.route('/').get(getRolesHandler);
+router.get('/', getRolesHandler);
 
 export default router;
