@@ -1,11 +1,16 @@
 import express from 'express';
 import {
 	createUserHandler,
+	deleteUserHandler,
 	getUsersHandler,
 	updateUserHandler,
 } from '../controllers/user.controller';
 import { validate } from '../middleware/validate';
-import { createUserSchema, updateUserSchema } from '../schemas/user.schema';
+import {
+	createUserSchema,
+	deleteUserSchema,
+	updateUserSchema,
+} from '../schemas/user.schema';
 
 const router = express.Router();
 
@@ -14,6 +19,9 @@ router
 	.post(validate(createUserSchema), createUserHandler)
 	.get(getUsersHandler);
 
-router.patch('/:userId', validate(updateUserSchema), updateUserHandler);
+router
+	.route('/:userId')
+	.patch(validate(updateUserSchema), updateUserHandler)
+	.delete(validate(deleteUserSchema), deleteUserHandler);
 
 export default router;

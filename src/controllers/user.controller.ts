@@ -1,8 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
-import { CreateUserInput, UpdateUserInput } from '../schemas/user.schema';
+import {
+	CreateUserInput,
+	DeleteUserInput,
+	UpdateUserInput,
+} from '../schemas/user.schema';
 import {
 	createUser,
 	findUsers,
+	getUser,
 	getUserToUpdate,
 } from '../services/user.service';
 import { findRoleById } from '../services/role.service';
@@ -87,5 +92,25 @@ export const updateUserHandler = async (
 		data: {
 			user: updatedUser,
 		},
+	});
+};
+
+// ? DELETE method:- Delete User
+export const deleteUserHandler = async (
+	req: Request<DeleteUserInput>,
+	res: Response,
+	next: NextFunction
+) => {
+	const user = await getUser(req.params.userId);
+
+	if (!user) {
+		return next(new AppError(404, 'User with that ID not found'));
+	}
+
+	await user.remove();
+
+	res.json({
+		status: 'success',
+		data: null,
 	});
 };

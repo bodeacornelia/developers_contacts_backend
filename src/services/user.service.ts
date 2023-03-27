@@ -68,6 +68,10 @@ export const findUsers = async ({
 	})) as UserApiResponse[];
 };
 
+export const getUser = async (userId: string) => {
+	return await userRepository.findOneBy({ id: userId });
+};
+
 export const getUserToUpdate = async (userId: string) =>
 	userRepository.findOne({
 		where: {

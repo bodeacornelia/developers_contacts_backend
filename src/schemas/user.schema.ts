@@ -21,6 +21,10 @@ const params = {
 	}),
 };
 
+export const deleteUserSchema = object({
+	...params,
+});
+
 export const updateUserSchema = object({
 	...params,
 	body: object({
@@ -39,3 +43,4 @@ export const updateUserSchema = object({
 
 export type CreateUserInput = TypeOf<typeof createUserSchema>['body'];
 export type UpdateUserInput = TypeOf<typeof updateUserSchema>;
+export type DeleteUserInput = TypeOf<typeof deleteUserSchema>['params'];
